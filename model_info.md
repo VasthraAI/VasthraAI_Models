@@ -75,12 +75,9 @@ This GAN consits of the follwoing:
 
 The Generator follows a U-Net structure:
 
-**Encoder:** Extracts high-level features from sketches.
-
-**Bottleneck:** Latent representation.
-
-**Decoder:** Upscales features to generate a high-quality image.
-
+* **Encoder:** Extracts high-level features from sketches.
+* **Bottleneck:** Latent representation.
+* **Decoder:** Upscales features to generate a high-quality image.
 
 ```
 class Generator(nn.Module):
