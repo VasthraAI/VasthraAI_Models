@@ -31,3 +31,26 @@ Example
 ```
 python resize_color.py --input_folder "D:\\VasthraAI\\trials\\GEN_1\\dataset\\raw_images" --output_folder "D:\\VasthraAI\\trials\\GEN_1\\dataset\\real_images" --resolution 512
 ```
+
+## generate_sketches.py
+
+This Python script processes preprocessed images by converting them into sketches using edge detection. It takes RGB or grayscale images, applies a Gaussian blur to reduce noise, and uses the Canny edge detection algorithm to generate sketch-like outputs. This is useful for preparing data for generative models or artistic applications.
+
+The script accepts the following arguments:
+- **Input directory**: The folder containing preprocessed images. It is recommended to use `/dataset/real_images` (e.g., output from `resize_color.py`) as the input folder to maintain a clean workflow.
+- **Output directory**: The folder where the generated sketches will be saved. A suggested path is `/dataset/sketches` to keep your sketch outputs organized.
+
+Input images should be in .png, .jpg, or .jpeg format and ideally preprocessed (e.g., resized to a square resolution like 512x512 pixels using resize_color.py).
+
+**Usage**
+
+Execute the script using the following format, adjusting the directories to match your file paths:
+
+```bash
+python generate_sketches.py --input_folder "path/to/dataset/real_images" --output_folder "path/to/dataset/sketches"
+```
+
+Example
+```
+python generate_sketches.py --input_folder "D:\\VasthraAI\\trials\\GEN_1\\dataset\\real_images" --output_folder "D:\\VasthraAI\\trials\\GEN_1\\dataset\\sketches"
+```
