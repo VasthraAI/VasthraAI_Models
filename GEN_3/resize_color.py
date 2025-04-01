@@ -2,7 +2,7 @@ from PIL import Image
 import os
 import argparse
 
-def process_images(input_dir, output_dir):
+def process_images(input_dir, output_dir,resolution):
     # Ensure output directory exists
     os.makedirs(output_dir, exist_ok=True)
     
@@ -14,8 +14,8 @@ def process_images(input_dir, output_dir):
         if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
             try:
                 with Image.open(input_path) as img:
-                    # Resize the image to 512x512
-                    new_size = (512, 512)
+                    # Resize the image to input resolution
+                    new_size = (resolution, resolution)
                     resized_img = img.resize(new_size, Image.LANCZOS)
 
                     # Convert to RGB if necessary
@@ -45,12 +45,18 @@ def main():
         required=True,
         help="The directory where processed images will be saved"
     )
+    parser.add_argument(
+        "--resolution",
+        type=int,
+        required=True,
+        help="Enter the required pixel resolution needed. Default set to 512px"
+    )
 
     # Parse the arguments
     args = parser.parse_args()
 
     # Call the process_images function with provided directories
-    process_images(args.input_folder, args.output_folder)
+    process_images(args.input_folder, args.output_folder, args.resolution)
 
     print("All images processed successfully!")
 
