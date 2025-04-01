@@ -71,7 +71,7 @@ This GAN consits of the follwoing:
 1. A Generator that translates sketches to images.
 2. A Discriminator that evaluates the realism of generated images.
 
-#### Generator
+### Generator
 
 The Generator follows a U-Net structure:
 
@@ -97,6 +97,53 @@ class Generator(nn.Module):
         x = self.tanh(self.conv2(x))
         return x
 ```
+
+### Discriminator
+
+The Discriminator is a PatchGAN:
+
+* Instead of classifying an image as real or fake, it looks at small patches.
+* Outputs a 63×63 matrix (each value is the probability of realism for that patch).
+
+```
+class Discriminator(nn.Module):
+    def __init__(self):
+        super(Discriminator, self).__init__()
+        self.model = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=4, stride=2, padding=1),
+            nn.LeakyReLU(0.2),
+            nn.Conv2d(64, 128, kernel_size=4, stride=2, padding=1),
+            nn.LeakyReLU(0.2),
+            nn.Conv2d(128, 1, kernel_size=4, stride=1, padding=1),
+            nn.Sigmoid()  # Output probability of real/fake
+        )
+
+    def forward(self, x):
+        return self.model(x)
+```
+
+Instead of just looking at global realism, patchGAN examines textures locally. It works well for fine-grained details like batik patterns.
+
+#### Residual Blocks
+
+* Residual Blocks are used to help retain details in generated images. It reduces vanishing gradient problems.
+
+```
+class ResidualBlock(nn.Module):
+    def __init__(self, channels):
+        super(ResidualBlock, self).__init__()
+        self.conv1 = nn.Conv2d(channels, channels, kernel_size=3, stride=1, padding=1)
+        self.bn1 = nn.BatchNorm2d(channels)
+        self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, stride=1, padding=1)
+        self.bn2 = nn.BatchNorm2d(channels)
+
+    def forward(self, x):
+        residual = x
+        x = F.relu(self.bn1(self.conv1(x)))
+        x = self.bn2(self.conv2(x))
+        return F.relu(x + residual)
+```
+
 
 ## GEN_2
 
