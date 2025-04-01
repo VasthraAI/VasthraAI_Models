@@ -3,7 +3,7 @@
 - This document consits of the following processes.
 
 1. Preparing the dataset
-2. Creating sketches (optional)
+2. Creating sketches for dataset (optional)
 3. Training the GAN model
 4. Generating images
 
