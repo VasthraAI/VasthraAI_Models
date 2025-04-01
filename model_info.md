@@ -3,9 +3,9 @@
 - This document contains in detail information about each model and their differences.
 - It also discusses some basic information about how GAN model architecure, and how they work.
 
-## Generative Aderserial Networks (GANs)
+# Generative Aderserial Networks (GANs)
 
-- Generative Adversarial Networks (GANs) are a class of machine learning models designed to generate new data similar to the training set. Introduced by Ian Goodfellow and colleagues in 2014, GANs consist of two neural networks that are trained simultaneously in a competitive setting.
+Generative Adversarial Networks (GANs) are a class of machine learning models designed to generate new data similar to the training set. Introduced by Ian Goodfellow and colleagues in 2014, GANs consist of two neural networks that are trained simultaneously in a competitive setting.
 
 ### How Do GANs Work?
 
@@ -58,7 +58,45 @@ GANs are widely used for:
 
 In essence, GANs are like an artist (generator) and a critic (discriminator) working together—or against each other—to create something new and convincing!
 
-## GEN_1
+---
+
+# Models
+
+## **GEN_1**
+
+### Model Architecture
+
+This GAN consits of the follwoing:
+
+1. A Generator that translates sketches to images.
+2. A Discriminator that evaluates the realism of generated images.
+
+#### Generator
+
+The Generator follows a U-Net structure:
+
+**Encoder:** Extracts high-level features from sketches.
+**Bottleneck:** Latent representation.
+**Decoder:** Upscales features to generate a high-quality image.
+
+```
+class Generator(nn.Module):
+    def __init__(self, input_channels=1, output_channels=3, num_residual_blocks=6):
+        super(Generator, self).__init__()
+        self.conv1 = nn.Conv2d(input_channels, 64, kernel_size=7, stride=1, padding=3)
+        self.bn1 = nn.BatchNorm2d(64)
+
+        self.res_blocks = nn.Sequential(*[ResidualBlock(64) for _ in range(num_residual_blocks)])
+
+        self.conv2 = nn.Conv2d(64, output_channels, kernel_size=7, stride=1, padding=3)
+        self.tanh = nn.Tanh()
+
+    def forward(self, x):
+        x = F.relu(self.bn1(self.conv1(x)))
+        x = self.res_blocks(x)
+        x = self.tanh(self.conv2(x))
+        return x
+```
 
 ## GEN_2
 
